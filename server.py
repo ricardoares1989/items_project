@@ -1,6 +1,14 @@
 from mcp.server.fastmcp import FastMCP
+from starlette.applications import Starlette
+from starlette.routing import Mount
 
 mcp = FastMCP("Demo")
+
+app = Starlette(
+    routes=[
+        Mount("/", app=mcp.sse_app())
+    ]
+)
 
 @mcp.tool()
 def add(a: int, b: int) -> int:

@@ -5,3 +5,6 @@ set shell := ["powershell", "-NoProfile", "-NonInteractive", "-Command"]
 # Ejecuta el comando uv run mcp dev server.py dentro del entorno de just
 mcp-dev:
     uv run mcp dev server.py
+
+mcp-sse:
+    uv run uvicorn server:app
