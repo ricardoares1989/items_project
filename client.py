@@ -1,11 +1,42 @@
 from mcp import ClientSession, StdioServerParameters, types
 from mcp.client.stdio import stdio_client
+import json
+from openai.types.responses import ResponseFunctionToolCall
+
+from core.settings import settings
+from openai import OpenAI
+
 
 server_params = StdioServerParameters(
     command="mcp",
     args=["run", "server.py"],
     env=None
 )
+
+
+def convert_to_llm_tool(tool: types.Tool):
+    tool_schema = {
+
+            "name": tool.name,
+            "description": tool.description,
+            "type": "function",
+            "parameters": {
+                "type": "object",
+                "properties": tool.inputSchema["properties"]
+            }
+    }
+    return tool_schema
+
+def call_llm_to_retrieve_arguments(prompt: str, functions):
+    tool_calls = []
+    with OpenAI(api_key=settings.openai_api_key) as client:
+        chat_completion = client.responses.create(
+            model="gpt-4o", tools=functions, input=prompt
+            )
+    for response in chat_completion.output:
+        if isinstance(response, ResponseFunctionToolCall):
+            tool_calls.append({"name": response.name , "args": json.loads(response.arguments)})
+    return tool_calls
 
 async def run():
     async with stdio_client(server_params) as (read, write):
@@ -17,21 +48,16 @@ async def run():
             print("LISTING RESOURCES")
             for resource in resources:
                 print(resource)
-            tools = await session.list_tools()
+            tools: types.ListToolsResult = await session.list_tools()
             print("LISTING TOOLS")
-            for tool in tools:
-                print(tool)
-
-            print("READING RESOURCE")
-            content, mime_type = await session.read_resource(
-                "greeting://hello"
-            )
-            print(f"El contenido es {content}, su mime type es {mime_type}")
-            print("CALL TOOL")
-            result = await session.call_tool("add", arguments={
-                "a": 1, "b": 23
-            })
-            print(result.content)
+            functions = []
+            for tool in tools.tools:
+                functions.append(convert_to_llm_tool(tool))
+            prompt = "agrega 2 a 50, si no obtienes respuesta, retorna una disculpa"
+            arguments_retrieved = call_llm_to_retrieve_arguments(prompt, functions)
+            for f in arguments_retrieved:
+                result = await session.call_tool(f["name"], f["args"])
+                print("Respuesta", result.content[0].text)
 
 
 if __name__ == '__main__':

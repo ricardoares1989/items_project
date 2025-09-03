@@ -7,4 +7,8 @@ dependencies = [
     "mcp[cli]",
     "requests",
     "jupyter",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+    "openai[aiohttp]>=1.102.0",
+    "google-genai>=1.31.0",
 ]

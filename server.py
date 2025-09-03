@@ -8,7 +8,7 @@ def add(a: int, b: int) -> int:
     Add two numbers
     :param a:
     :param b:
-    :return:
+    :return int:
     """
     return a + b
 
