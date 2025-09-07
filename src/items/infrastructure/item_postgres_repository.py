@@ -4,7 +4,7 @@ from src.shared.infrastructure.base_repository_postgres import BaseRepositoryPos
 from datetime import datetime
 
 
-class ItemPostgresRepository(BaseRepositoryPostgres, ItemRepository):
+class ItemPostgresRepository(ItemRepository, BaseRepositoryPostgres):
 
     def __init__(self):
         super().__init__()
@@ -13,12 +13,7 @@ class ItemPostgresRepository(BaseRepositoryPostgres, ItemRepository):
     async def save(self, item: Item):
         query = """
             INSERT INTO items (uuid, name, quantity, description, created_datetime, modified_datetime, planned_purchase_date)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            ON CONFLICT (name) DO UPDATE SET
-                quantity = EXCLUDED.quantity,
-                description = EXCLUDED.description,
-                modified_datetime = NOW(),
-                planned_purchase_date = EXCLUDED.planned_purchase_date;
+            VALUES ($1, $2, $3, $4, $5, $6, $7);
         """
         async with self._connection_pool.acquire() as conn:
             await conn.execute(

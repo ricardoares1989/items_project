@@ -17,10 +17,12 @@ dependencies = [
     "dependency-injector>=4.48.1",
     "fastapi>=0.116.1",
     "psycopg2>=2.9.10",
+    "pytest-asyncio>=1.1.0",
 ]
 
 [dependency-groups]
 dev = [
     "black>=25.1.0",
     "pytest>=8.4.2",
+    "pytest-async>=0.1.1",
 ]
