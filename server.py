@@ -4,11 +4,8 @@ from starlette.routing import Mount
 
 mcp = FastMCP("Demo")
 
-app = Starlette(
-    routes=[
-        Mount("/", app=mcp.sse_app())
-    ]
-)
+app = Starlette(routes=[Mount("/", app=mcp.sse_app())])
+
 
 @mcp.tool()
 def add(a: int, b: int) -> int:
@@ -20,9 +17,8 @@ def add(a: int, b: int) -> int:
     """
     return a + b
 
-@mcp.resource(
-    "greeting://{name}"
-)
+
+@mcp.resource("greeting://{name}")
 def get_greeting(name: str) -> str:
     """
     Get a greeting
@@ -30,5 +26,3 @@ def get_greeting(name: str) -> str:
     :return: str
     """
     return f"Hello {name}!"
-
-

@@ -12,4 +12,12 @@ dependencies = [
     "openai[aiohttp]>=1.102.0",
     "google-genai>=1.31.0",
     "uvicorn>=0.35.0",
+    "asyncpg>=0.30.0",
+    "yoyo-migrations>=9.0.0",
+    "dependency-injector>=4.48.1",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
 ]

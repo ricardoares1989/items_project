@@ -3,46 +3,42 @@ from mcp.client.stdio import stdio_client
 import json
 from openai.types.responses import ResponseFunctionToolCall
 
-from core.settings import settings
+from src.shared.settings import settings
 from openai import OpenAI
 
 
 server_params = StdioServerParameters(
-    command="mcp",
-    args=["run", "server.py"],
-    env=None
+    command="mcp", args=["run", "server.py"], env=None
 )
 
 
 def convert_to_llm_tool(tool: types.Tool):
     tool_schema = {
-
-            "name": tool.name,
-            "description": tool.description,
-            "type": "function",
-            "parameters": {
-                "type": "object",
-                "properties": tool.inputSchema["properties"]
-            }
+        "name": tool.name,
+        "description": tool.description,
+        "type": "function",
+        "parameters": {"type": "object", "properties": tool.inputSchema["properties"]},
     }
     return tool_schema
+
 
 def call_llm_to_retrieve_arguments(prompt: str, functions):
     tool_calls = []
     with OpenAI(api_key=settings.openai_api_key) as client:
         chat_completion = client.responses.create(
             model="gpt-4o", tools=functions, input=prompt
-            )
+        )
     for response in chat_completion.output:
         if isinstance(response, ResponseFunctionToolCall):
-            tool_calls.append({"name": response.name , "args": json.loads(response.arguments)})
+            tool_calls.append(
+                {"name": response.name, "args": json.loads(response.arguments)}
+            )
     return tool_calls
+
 
 async def run():
     async with stdio_client(server_params) as (read, write):
-        async with ClientSession(
-            read, write
-        ) as session:
+        async with ClientSession(read, write) as session:
             await session.initialize()
             resources = await session.list_resource_templates()
             print("LISTING RESOURCES")
@@ -60,7 +56,7 @@ async def run():
                 print("Respuesta", result.content[0].text)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import asyncio
 
     asyncio.run(run())

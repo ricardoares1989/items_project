@@ -1,0 +1,39 @@
+# src/items/infrastructure/
+# Carpeta para infraestructura de items
+# src/items/domain/item.py
+from abc import ABC, abstractmethod
+from typing import Optional
+from datetime import datetime
+from src.shared.domain.aggregate_root import AggregateRoot
+
+class Item(AggregateRoot, ABC):
+    def __init__(
+        self,
+        name: str,
+        quantity: Optional[int] = None,
+        description: Optional[str] = None,
+        planned_purchase_date: Optional[datetime] = None,
+    ):
+        super().__init__()
+        self.name = name
+        self.quantity = quantity
+        self.description = description
+        self.created_datetime = datetime.now()
+        self.modified_datetime = datetime.now()
+        self.planned_purchase_date = planned_purchase_date
+
+    @abstractmethod
+    def save(self):
+        raise NotImplementedError("Save method must be implemented.")
+
+    @abstractmethod
+    def delete(self):
+        raise NotImplementedError("Delete method must be implemented.")
+
+    @abstractmethod
+    def purchased(self):
+        raise NotImplementedError("Purchased method must be implemented.")
+
+    def trigger_domain_event(self, event: str):
+        self.add_event(event)
+
