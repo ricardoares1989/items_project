@@ -1,5 +1,8 @@
+import uuid
 from typing import Optional
 from datetime import datetime
+
+
 from src.shared.domain.aggregate_root import AggregateRoot
 from src.shared.domain.event import CloudEvent
 
@@ -7,6 +10,7 @@ from src.shared.domain.event import CloudEvent
 class Item(AggregateRoot):
     def __init__(
         self,
+        uuid_: uuid.UUID,
         name: str,
         quantity: Optional[int] = None,
         description: Optional[str] = None,
@@ -14,6 +18,7 @@ class Item(AggregateRoot):
         created_datetime: Optional[datetime] = datetime.now(),
         modified_datetime: Optional[datetime] = datetime.now(),
     ):
+        self.uuid_ = uuid_
         self.name = name
         self.quantity = quantity
         self.description = description
@@ -27,6 +32,7 @@ class Item(AggregateRoot):
             type="purchased.items.item_saved",
             datacontenttype="application/json",
             data={
+                "uuid": str(self.uuid_),
                 "name": self.name,
                 "quantity": self.quantity,
                 "description": self.description,

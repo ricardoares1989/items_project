@@ -3,9 +3,10 @@ from mcp.client.stdio import stdio_client
 import json
 from openai.types.responses import ResponseFunctionToolCall
 
-from src.shared.settings import settings
+from src.shared.settings import Settings
 from openai import OpenAI
 
+settings = Settings()
 
 server_params = StdioServerParameters(
     command="mcp", args=["run", "server.py"], env=None
