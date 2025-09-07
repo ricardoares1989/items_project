@@ -7,4 +7,4 @@ mcp-dev:
     uv run mcp dev server.py
 
 mcp-sse:
-    uv run uvicorn server:app
+    uv run uvicorn api.main:app

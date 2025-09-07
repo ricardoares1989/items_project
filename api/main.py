@@ -4,13 +4,13 @@ from mcp.server.fastmcp import FastMCP
 mcp = FastMCP("Demo")
 
 
-api = FastAPI(
+app = FastAPI(
     title="Demo",
     description="Demo server",
     version="0.1.0",
 )
 
-api.mount("/", mcp.sse_app())
+app.mount("/", mcp.sse_app())
 
 
 @mcp.tool()

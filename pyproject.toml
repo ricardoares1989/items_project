@@ -15,9 +15,11 @@ dependencies = [
     "asyncpg>=0.30.0",
     "yoyo-migrations>=9.0.0",
     "dependency-injector>=4.48.1",
+    "fastapi>=0.116.1",
 ]
 
 [dependency-groups]
 dev = [
     "black>=25.1.0",
+    "pytest>=8.4.2",
 ]
