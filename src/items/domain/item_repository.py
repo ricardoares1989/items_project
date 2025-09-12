@@ -15,3 +15,7 @@ class ItemRepository(ABC):
     @abstractmethod
     async def purchased(self, item: Item):
         raise NotImplementedError("Purchased method must be implemented.")
+
+    @abstractmethod
+    async def get_by_uuid(self, uuid: str) -> Item:
+        raise NotImplementedError("Get by UUID method must be implemented.")
