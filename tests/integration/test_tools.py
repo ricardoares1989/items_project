@@ -2,16 +2,17 @@ import pytest
 from unittest.mock import patch, Mock
 
 from api.v1.tools.items import create_item
+from src.shared.application.main_container import MainContainer
 
 
 @pytest.mark.asyncio
-async def test_create_item_tool(main_container):
+async def test_create_item_tool(main_container: MainContainer):
     # Arrange
     item_name = "Test Item from Tool"
     item_quantity = 10
 
     mock_request = Mock()
-    mock_request.app.state.container = main_container
+    mock_request.state.container = main_container
 
     with patch('api.v1.tools.items.get_http_request', return_value=mock_request):
         # Act

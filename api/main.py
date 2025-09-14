@@ -9,6 +9,8 @@ from src.shared.application.main_container import MainContainer
 
 mcp = FastMCP("Demo")
 
+# Import the tools to register them
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,7 +18,7 @@ async def lifespan(app: FastAPI):
     await main_container.init_resources()
     app.state.container = main_container
     yield
-    await app.state.container.shutdown_resources()
+    await main_container.shutdown_resources()
 
 
 app = FastAPI(

@@ -1,5 +1,5 @@
-from typing import Optional
 from datetime import datetime
+from typing import Optional
 
 from fastmcp.server.dependencies import get_http_request
 from starlette.requests import Request
@@ -14,7 +14,7 @@ async def create_item(
     name: str,
     quantity: Optional[int] = None,
     description: Optional[str] = None,
-    planned_purchase_date: Optional[datetime] = None,
+    planned_purchase_date: Optional[str] = None,
 ) -> dict:
     """
     Create an item
@@ -24,15 +24,23 @@ async def create_item(
     :param planned_purchase_date:
     :return:
     """
+    planned_date = None
+    if planned_purchase_date:
+        try:
+            planned_date = datetime.fromisoformat(planned_purchase_date)
+        except ValueError:
+            raise ValueError(
+                "planned_purchase_date must be in ISO format, e.g. '2025-09-14T00:00:00'"
+            )
+
     request: Request = get_http_request()
-    container = request.app.state.container
-    item_repository = container.item_repository()
-    use_case = CreateItemUseCase(repository=item_repository)
+    container = request.state.container
+    use_case: CreateItemUseCase = container.create_item_use_case()
     item: Item = await use_case(
         name=name,
         quantity=quantity,
         description=description,
-        planned_purchase_date=planned_purchase_date,
+        planned_purchase_date=planned_date,
     )
     return {
         "uuid": str(item.uuid_),

@@ -9,7 +9,7 @@ from openai import OpenAI
 settings = Settings()
 
 server_params = StdioServerParameters(
-    command="mcp", args=["run", "server.py"], env=None
+    command="uv", args=["run", "uvicorn", "api.main:app"], env=None
 )
 
 
