@@ -3,13 +3,13 @@ from mcp.client.stdio import stdio_client
 import json
 from openai.types.responses import ResponseFunctionToolCall
 
-from src.shared.settings import Settings
+from app.src.shared.settings import Settings
 from openai import OpenAI
 
 settings = Settings()
 
 server_params = StdioServerParameters(
-    command="uv", args=["run", "uvicorn", "api.main:app"], env=None
+    command="uv", args=["run", "uvicorn", "app.api.main:app"], env=None
 )
 
 
