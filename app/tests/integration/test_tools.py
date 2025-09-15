@@ -40,7 +40,7 @@ async def test_create_item_tool(main_container: MainContainer):
     assert created_item_dict["quantity"] == item_quantity
 
     # Verify from database
-    item_repository = main_container.item_repository()
+    item_repository = await main_container.item_repository()
     item_uuid = created_item_dict["uuid"]
     item_from_db = await item_repository.get_by_uuid(item_uuid)
 
