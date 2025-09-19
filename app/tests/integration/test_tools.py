@@ -48,3 +48,6 @@ async def test_create_item_tool(main_container: MainContainer):
     assert str(item_from_db.uuid_) == item_uuid
     assert item_from_db.name == item_name
     assert item_from_db.quantity == item_quantity
+
+
+no
