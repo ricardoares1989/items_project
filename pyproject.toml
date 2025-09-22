@@ -16,9 +16,9 @@ dependencies = [
     "yoyo-migrations>=9.0.0",
     "dependency-injector>=4.48.1",
     "fastapi>=0.116.1",
-    "psycopg2>=2.9.10",
     "pytest-asyncio>=1.1.0",
     "fastmcp>=2.12.2",
+    "psycopg2-binary>=2.9.10",
 ]
 
 [dependency-groups]
