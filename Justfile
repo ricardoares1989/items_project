@@ -8,4 +8,7 @@ mcp-dev:
 
 
 mcp-sse:
-    uv run uvicorn app.api.main:app
+    uv run python -m uvicorn app.api.main:app --reload
+
+run-migrations:
+    uv run python -m app.src.shared.infrastructure.run_migrations

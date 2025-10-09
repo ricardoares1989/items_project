@@ -7,7 +7,7 @@ __depends__ = {}
 
 def apply_step(conn):
     cursor = conn.cursor()
-    with open("./src/items/infrastructure/item.sql") as f:
+    with open("./app/src/items/infrastructure/item.sql") as f:
         item_sql = f.read()
     cursor.execute(item_sql)
 
